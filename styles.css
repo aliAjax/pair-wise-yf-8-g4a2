@@ -115,7 +115,7 @@ h2 {
 
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  grid-template-columns: repeat(4, minmax(110px, 1fr));
   gap: 10px;
 }
 
@@ -338,7 +338,7 @@ label {
   }
 
   .hero-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .segment-card {
@@ -352,4 +352,514 @@ label {
   .segment-actions button {
     width: 100%;
   }
+}
+
+/* ---------- 副标题 ---------- */
+
+.subtitle {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- 标签页 ---------- */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  padding: 10px 16px;
+  font-weight: 800;
+  color: var(--muted);
+  position: relative;
+  top: 2px;
+}
+
+.tabs button:hover {
+  color: var(--cyan);
+}
+
+.tabs button.active {
+  background: rgba(248, 247, 242, 0.96);
+  border-color: var(--line);
+  color: var(--ink);
+  box-shadow: 0 -3px 8px rgba(33, 38, 42, 0.06);
+}
+
+.tab-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 0 5px;
+}
+
+.tab-badge.hidden {
+  display: none;
+}
+
+/* ---------- 保存栏 ---------- */
+
+.save-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.save-status {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.save-status.dirty {
+  color: var(--amber);
+}
+
+#saveBtn.attention {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(212, 155, 53, 0.2);
+}
+
+#saveBtn kbd {
+  font-family: inherit;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+/* ---------- 跨窗口提示条 ---------- */
+
+.remote-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  background: rgba(212, 155, 53, 0.12);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.remote-banner[hidden] {
+  display: none;
+}
+
+/* ---------- 页面 ---------- */
+
+.page {
+  min-height: 200px;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+/* ---------- 片段卡待裁定 ---------- */
+
+.segment-card.pending {
+  border-color: var(--amber);
+  background: rgba(212, 155, 53, 0.08);
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.badge.pending {
+  background: rgba(212, 155, 53, 0.2);
+  color: #8a6420;
+}
+
+.badge.confirmed,
+.badge.ok {
+  background: rgba(77, 118, 86, 0.16);
+  color: var(--green);
+}
+
+.badge.void {
+  background: rgba(181, 77, 72, 0.15);
+  color: var(--red);
+}
+
+.inline-field {
+  display: inline-grid;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.inline-field input,
+.inline-field select {
+  width: auto;
+  padding: 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.inline-field input {
+  width: 64px;
+}
+
+.pending-note {
+  font-size: 12px;
+  color: #8a6420;
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.pending-note button {
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* ---------- 回执页 ---------- */
+
+.merge-result {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.merge-result .ok {
+  color: var(--green);
+}
+
+.merge-result .warn {
+  color: #8a6420;
+}
+
+.merge-result .unmatched {
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.pending-card {
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  background: #fffdf7;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.pending-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.compare-col {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.compare-col.receipt {
+  border-color: var(--cyan);
+  background: rgba(52, 125, 137, 0.06);
+}
+
+.compare-col h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.compare-col button {
+  margin-top: 8px;
+  width: 100%;
+  padding: 6px;
+  font-size: 13px;
+}
+
+.confirmed-list {
+  display: grid;
+  gap: 6px;
+}
+
+.confirmed-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: #fffdf7;
+}
+
+.confirmed-row span {
+  color: var(--muted);
+}
+
+/* ---------- 装盘页 ---------- */
+
+.plan-status {
+  font-weight: 900;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.plan-status.ok {
+  color: var(--green);
+}
+
+.plan-status.void {
+  color: var(--red);
+}
+
+.void-reason {
+  border: 1px solid rgba(181, 77, 72, 0.3);
+  background: rgba(181, 77, 72, 0.08);
+  color: var(--red);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.reel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.reel-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffdf7;
+  padding: 10px;
+}
+
+.reel-card.over {
+  border-color: var(--red);
+}
+
+.reel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.reel-head span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.reel-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.reel-chip {
+  border-radius: 999px;
+  background: rgba(52, 125, 137, 0.12);
+  color: var(--cyan);
+  padding: 4px 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------- 许可页 ---------- */
+
+.permit-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.permit-card {
+  border-left: 4px solid var(--green);
+}
+
+.permit-card.void {
+  border-left-color: var(--red);
+  opacity: 0.92;
+}
+
+.permit-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.permit-meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.permit-snapshot {
+  margin-bottom: 10px;
+}
+
+.permit-snapshot h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.risk-rows {
+  display: grid;
+  gap: 4px;
+}
+
+.risk-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1 dashed var(--line);
+}
+
+.risk-row span {
+  color: var(--muted);
+}
+
+/* ---------- 批次页 ---------- */
+
+.simulate-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.simulate-toggle input {
+  width: auto;
+}
+
+.batch-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.batch-card.resolved {
+  opacity: 0.75;
+}
+
+.batch-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.batch-time {
+  color: var(--muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.conflict-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.conflict-table th,
+.conflict-table td {
+  border: 1px solid var(--line);
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.conflict-table th {
+  background: rgba(52, 125, 137, 0.08);
+  font-size: 12px;
+}
+
+.conflict-table td:nth-child(2) {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.conflict-table td:nth-child(3) {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.choice-cell {
+  white-space: nowrap;
+}
+
+.choice-cell label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.choice-cell input {
+  width: auto;
 }
