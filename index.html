@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>胶片分镜条核对台</title>
+    <title>胶片分镜条放行台</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="shell">
       <header class="hero">
         <div>
-          <p class="eyebrow">纸质放映胶片整理</p>
-          <h1>胶片分镜条核对台</h1>
+          <p class="eyebrow">纸质放映胶片 · 外检回执签放</p>
+          <h1>胶片分镜条放行台</h1>
         </div>
         <div class="hero-stats">
           <div>
@@ -19,40 +19,56 @@
             <strong id="totalDuration">0:00</strong>
           </div>
           <div>
-            <span>破损片段</span>
+            <span>风险片段</span>
             <strong id="damageCount">0</strong>
           </div>
           <div>
             <span>片段数</span>
             <strong id="segmentCount">0</strong>
           </div>
+          <div>
+            <span>待裁定</span>
+            <strong id="pendingCount">0</strong>
+          </div>
         </div>
       </header>
 
-      <section class="toolbar">
-        <label>
-          胶片卷
-          <input id="reelTitle" type="text" placeholder="例：春日试映A卷" />
-        </label>
-        <label>
-          颜色偏移
-          <select id="colorFilter">
-            <option value="all">全部</option>
-            <option value="正常">正常</option>
-            <option value="偏红">偏红</option>
-            <option value="偏青">偏青</option>
-            <option value="偏黄">偏黄</option>
-            <option value="褪色">褪色</option>
-          </select>
-        </label>
-        <label>
-          搜索
-          <input id="searchInput" type="search" placeholder="片段编号或备注" />
-        </label>
-        <button id="exportBtn">导出清单</button>
-      </section>
+      <nav class="tabs">
+        <button type="button" data-nav="desk">排片核对</button>
+        <button type="button" data-nav="receipts">
+          外检回执 <span class="tab-badge" id="badgePending" hidden>0</span>
+        </button>
+        <button type="button" data-nav="release">放行签放</button>
+        <span class="save-area">
+          <label class="inline-toggle">
+            <input type="checkbox" id="failToggle" />
+            故障演练（下次保存失败）
+          </label>
+          <button id="exportBtn">导出清单</button>
+          <button id="saveBtn" class="primary">保存修改</button>
+          <span id="saveStatus" class="save-status"></span>
+        </span>
+      </nav>
 
-      <section class="layout">
+      <div id="remoteBanner" class="banner remote" hidden>
+        <span id="remoteVersion"></span>
+        <button type="button" id="adoptRemoteBtn">采用新版本</button>
+      </div>
+
+      <div id="outboxBanner" class="banner outbox" hidden>
+        <div>
+          <strong>有未完成批次：</strong>
+          <span>保存失败时本窗口的修改完整保留在下面，可重试或放弃。</span>
+        </div>
+        <ul id="outboxList" class="outbox-list"></ul>
+        <div class="banner-actions">
+          <button type="button" id="retryAllBtn">全部重试</button>
+          <button type="button" id="discardOutboxBtn">清空批次</button>
+        </div>
+      </div>
+
+      <!-- ============ 排片核对页 ============ -->
+      <section class="layout" data-page="desk">
         <aside class="panel">
           <h2>录入片段</h2>
           <form id="segmentForm" class="segment-form">
@@ -99,7 +115,24 @@
         <section class="panel list-panel">
           <div class="panel-head">
             <h2>放映顺序</h2>
-            <span>拖拽片段调整顺序</span>
+            <div class="toolbar-inline">
+              <label>
+                颜色
+                <select id="colorFilter">
+                  <option value="all">全部</option>
+                  <option value="正常">正常</option>
+                  <option value="偏红">偏红</option>
+                  <option value="偏青">偏青</option>
+                  <option value="偏黄">偏黄</option>
+                  <option value="褪色">褪色</option>
+                </select>
+              </label>
+              <label>
+                搜索
+                <input id="searchInput" type="search" placeholder="片段编号或备注" />
+              </label>
+              <span>拖拽调整顺序</span>
+            </div>
           </div>
           <div id="segmentList" class="segment-list"></div>
         </section>
@@ -109,8 +142,125 @@
           <div id="warningList" class="warning-list"></div>
         </aside>
       </section>
+
+      <!-- ============ 外检回执页 ============ -->
+      <section data-page="receipts" hidden>
+        <div class="receipt-layout">
+          <div class="panel">
+            <h2>纸质外检单登记（晚到照录，不盖排片员结论）</h2>
+            <form id="receiptSingleForm" class="segment-form">
+              <div class="inline-grid">
+                <label>片段编号<input id="rCode" required placeholder="A-006" /></label>
+                <label>时长秒数<input id="rDuration" type="number" min="1" required value="12" /></label>
+                <label>颜色偏移
+                  <select id="rShift">
+                    <option>正常</option>
+                    <option>偏红</option>
+                    <option>偏青</option>
+                    <option>偏黄</option>
+                    <option>褪色</option>
+                  </select>
+                </label>
+                <label>破损结论
+                  <select id="rDamage">
+                    <option>完好</option>
+                    <option>轻微划痕</option>
+                    <option>齿孔破损</option>
+                    <option>接片松动</option>
+                    <option>需跳过</option>
+                  </select>
+                </label>
+                <label class="full">回执单号<input id="rNo" placeholder="WJ-0402" /></label>
+              </div>
+              <button class="primary" type="submit">登记回执并按编号归并</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h2>批量登记</h2>
+            <form id="receiptBatchForm" class="segment-form">
+              <textarea id="batchText" rows="5" placeholder="每行一张：编号,时长,颜色,破损,回执单号&#10;A-006,9,偏红,齿孔破损,WJ-0402&#10;A-012,14,褪色,接片松动,WJ-0402"></textarea>
+              <pre id="batchErrors" class="batch-errors"></pre>
+              <button type="submit">批量归并</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="receiptSummary" class="mini-stat-row"></div>
+
+        <div id="receiptPanels" class="receipt-panels">
+          <section class="panel">
+            <h2>结论不一致 · 待裁定</h2>
+            <div id="conflictList" class="conflict-list"></div>
+          </section>
+          <section class="panel">
+            <h2>已人工裁定</h2>
+            <div id="ruledList" class="conflict-list"></div>
+          </section>
+          <section class="panel">
+            <h2>找不到对应片段的回执</h2>
+            <div id="unmatchedList" class="conflict-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ============ 放行签放页 ============ -->
+      <section data-page="release" hidden>
+        <div class="release-layout">
+          <div class="panel">
+            <h2>签放闸口</h2>
+            <p class="hint">外检双结论未裁定前不能生成放映许可；找不到对应片段的回执同样拦截。</p>
+            <div id="gateList" class="gate-list"></div>
+            <button id="issuePermitBtn" class="primary" type="button">生成放映许可</button>
+          </div>
+
+          <div class="panel">
+            <h2>当前装盘方案预排</h2>
+            <div id="platePlan" class="plate-plan"></div>
+          </div>
+        </div>
+        <section class="panel permit-panel-wrap">
+          <h2>放映许可</h2>
+          <div id="permitPanel"></div>
+        </section>
+      </section>
     </main>
 
-    <script src="app.js"></script>
+    <!-- 并发保存冲突弹窗 -->
+    <div id="conflictModal" class="modal" hidden>
+      <div class="modal-card">
+        <h2>保存冲突：本窗口版本落后</h2>
+        <p id="conflictSummary" class="hint"></p>
+        <div class="diff-table-wrap">
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>冲突字段</th>
+                <th>本窗口待保存值</th>
+                <th>另一窗口已保存值（新）</th>
+              </tr>
+            </thead>
+            <tbody id="conflictDiffList"></tbody>
+          </table>
+        </div>
+        <label class="inline-toggle">
+          <input type="checkbox" id="forceOverwrite" />
+          我已逐项核对冲突字段，确认以本窗口版本强制覆盖
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="mergeForceBtn" class="primary">确认后强制保存</button>
+          <button type="button" id="mergeAdoptBtn">采用另一窗口新版本</button>
+          <button type="button" id="mergeCancelBtn">先不处理</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/rules.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/views/ui.js"></script>
+    <script src="js/views/desk.js"></script>
+    <script src="js/views/receipts.js"></script>
+    <script src="js/views/release.js"></script>
+    <script src="js/app.js"></script>
   </body>
 </html>
